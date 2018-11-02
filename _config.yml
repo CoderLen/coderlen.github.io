@@ -111,3 +111,5 @@ friends: [
         href: "http://wepiaofei.github.io/blog/"
     }
 ]
+
+theme: jekyll-theme-leap-day
