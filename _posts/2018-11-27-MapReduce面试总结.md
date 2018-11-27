@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "MapReduce面试总结"
-date:       2018-11-23 17:19:00
+date:       2018-11-27 17:19:00
 author:     "CoderLen"
 header-img: "img/bigdata.jpg"
 tags:
