@@ -2,7 +2,7 @@
 layout:     post
 title:      "ZooKeeper面试总结"
 author:     "CoderLen"
-header-img: "img/bigdata.jpg"
+header-img: "img/in-post/zookeeper-bg.jpg"
 tags:
     - 面试
     - 大数据
