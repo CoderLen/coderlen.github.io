@@ -1,4 +1,16 @@
-### MapReduce面试总结
+---
+layout:     post
+title:      "MapReduce面试总结"
+date:       2018-11-23 17:19:00
+author:     "CoderLen"
+header-img: "img/bigdata.jpg"
+tags:
+    - 面试
+    - 大数据
+    - MapReduce
+---
+
+## MapReduce面试总结
 
 1. Hadoop MapReduce提供了什么机制允许一个作业的各个任务间共享只读文件？尝试描述该机制的工作原理。
 

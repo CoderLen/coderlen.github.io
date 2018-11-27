@@ -1,4 +1,17 @@
-### ZooKeeper面试总结
+---
+layout:     post
+title:      "ZooKeeper面试总结"
+date:       2018-11-23 17:19:00
+author:     "CoderLen"
+header-img: "img/bigdata.jpg"
+tags:
+    - 面试
+    - 大数据
+    - zookeeper
+---
+
+
+## ZooKeeper面试总结
 
 1. ZooKeeper是什么？
 
@@ -109,6 +122,6 @@
 
 
 
-### 参考
+## 参考
 
 1. https://segmentfault.com/a/1190000014479433
