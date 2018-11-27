@@ -1,14 +1,14 @@
 ---
-layout:     post
-title:      "MapReduce面试总结"
-date:       2018-11-27 17:19:00
-author:     "CoderLen"
-header-img: "img/in-post/bigdata.jpg"
-tags:
-    - 面试
-    - 大数据
-    - MapReduce
----
+   layout:     post
+   title:      "MapReduce面试总结"
+   date:       2018-11-27 17:19:00
+   author:     "CoderLen"
+   header-img: "img/in-post/bigdata.jpg"
+   tags:
+       - 面试
+       - 大数据
+       - MapReduce
+   ---
 
 ## MapReduce面试总结
 
