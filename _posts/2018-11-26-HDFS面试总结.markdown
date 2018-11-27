@@ -1,0 +1,93 @@
+---
+layout:     post
+title:      "HDFS常见问题汇总"
+author:     "CoderLen"
+header-img: "img/in-post/bigdata.jpg"
+tags:
+    - 面试
+    - 大数据
+    - Hadoop
+    - hdfs
+---
+## HDFS常见问题汇总
+
+### HDFS中的block， packet， chunk
+
+- block
+
+  数据存储的单位，默认是128m。块太小，寻址时间占用过高。块过大，Map任务数太小，作业执行速度变慢。
+
+- packet
+
+  数据存储的第二单位，它是client端向DataNode，或者DataNode的Pipeline之间传数据的基本单位，默认是64kb
+
+- chunk
+
+  chunk是最小单位，它是client端向DataNode，或者DataNode的Pipeline之间进行数据校验的基本单位，默认是512Byte，因为用作校验，所以每个chunk需要带有4Byte的校验位。所以实际每个chunk写入packet的大小是516byte，由此可见真实数据与校验值数据的比值约为128:1。
+
+
+
+###  HDFS的写文件流程
+
+
+
+![](https://img-blog.csdn.net/20180716221908696?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3doZHhqYnc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+1. 客户端向NameNode发出写文件的请求；
+2. 检查是否已存在文件，检查权限。若通过检查，直接先将操作写入EditLog，并返回输出流对象。
+3. Client按128M的块切分文件；
+4. Client将NameNode返回的分配的可写的DataNode列表和Data数据一同发送给最近的第一个DataNode节点。此后client端和NameNode分配的多个DataNode构成Pipeline管道，Client端向输出流对象中写数据。Client端每项第一个DataNode写入一个packet，这个packet便会直接在pipeline里传给第二个，第三个...DataNode。并不是写好一个快或者一整个文件后才向后分发的。
+5. 每个DataNode写完一个块后，会返回确认信息。
+6. 写完数据，关闭输出流。
+7. 发送完成信号给NameNode。
+
+
+
+### HDFS的读文件流程
+
+![](https://img-blog.csdn.net/20180716231213892?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3doZHhqYnc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+1. client访问NameNode，查询元数据信息，获得这个文件的数据块的位置列表，返回输入流对象；
+2. 就近挑选一台DataNode服务器，请求建立输入流。
+3. DataNode向输入流中写数据，以packet为单位来校验。
+4. 关闭输入流。
+
+
+
+### 读写过程，数据完整性如何保持？
+
+通过检验和。因为每个chunk中都有一个校验位，一个个chunk构成packet，一个个packet最终形成block，故可在block上求校验和。
+
+HDFS的client端实现了HDFS文件内容的校验和（checksum）检查。当客户端创建一个新的HDFS文件时，分块后会计算这个文件每个数据块的校验和，因此校验和会一个隐藏文件的形式保存在同一个HDFS命名空间下。当client端从HDFS中读取文件内容后，它会检查分块时候计算出的校验和（隐藏文件里）和读取到的文件块中的校验和是否相匹配，如果不匹配，客户端可以选择从其他DataNode获取该数据块的副本。
+
+HDFS中文件块目录结构具体格式如下：
+
+${dfs.datanode.data.dir}/ 
+├── current 
+│ ├── BP-526805057-127.0.0.1-1411980876842 
+│ │ └── current 
+│ │ ├── VERSION 
+│ │ ├── finalized 
+│ │ │ ├── blk_1073741825 
+│ │ │ ├── blk_1073741825_1001.meta 
+│ │ │ ├── blk_1073741826 
+│ │ │ └── blk_1073741826_1002.meta 
+│ │ └── rbw 
+│ └── VERSION 
+
+| — in_use.lock
+
+in_use.lock表示DataNode正在对文件夹进行操作
+rbw是“replica being written”的意思，该目录用于存储用户当前正在写入的数据。 
+Block元数据文件（*.meta）由一个包含版本、类型信息的头文件和一系列校验值组成。校验和也正是存在其中。
+
+
+
+
+### 参考来源
+
+作者：bw_233 
+来源：CSDN 
+原文：https://blog.csdn.net/whdxjbw/article/details/81072207 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
