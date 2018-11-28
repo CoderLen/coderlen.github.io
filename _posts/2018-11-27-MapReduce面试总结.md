@@ -5,10 +5,10 @@
    author:     "CoderLen"
    header-img: "img/in-post/bigdata.jpg"
    tags:
-       - 面试
-       - 大数据
-       - MapReduce
-   ---
+​       - 面试
+​       - 大数据
+
+​       - MapReduce
 
 ## MapReduce面试总结
 
