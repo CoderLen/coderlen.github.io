@@ -114,7 +114,19 @@ tags:
 
             ![](https://segmentfault.com/img/bV8XeR?w=533&h=451)
 
-      10. 
+      10. Zookeeper的脑裂问题
+
+          zookeeper通过内部心跳机制来确定master的状态，一旦master出现意外，zookeeper能很快获知并且通知其他slave，其他slave在之后作出相关反应，或者重新进行master选举。但如果因为心跳超时可能是master挂了，也可能是master，zookeeper之间的网络出现了问题，同样可能导致。这种情况就是假死，master并没有死掉，但是与zookeeper之间网络出现了问题导致zk认为其挂掉了，然后通知其他节点进行切换。
+
+          如何避免？在slave切换时不在检查到老的master出现问题后马上切换，而是休眠一段足够的时间，确保老的master已经获知变更并且做了相关的shutdown清理工作了然后再注册成为master。这个休眠时间一般定义成与zookeeper的超时时间就够了，但这段时间系统可能是不可用的，但也比脑裂导致的数据不一致问题好点。
+
+      11. Zookeeper是怎么保证原子性，怎么实现分布式锁的。
+
+          数据一致性是靠Paxos算法保证的，Paxos算法可以说是分布式一致性算法的鼻祖，是Zookeeper的基础。zookeeper用了ZAB协议作为数据一致性的算法，ZAB可以是Paxos算法的基础上扩展改造而来的，ZAB协议设计了支持崩溃恢复。
+
+      12. Zookeeper Leader选举，节点类型，ZooKeeper实现原理。
+
+      13. 
 
 
 

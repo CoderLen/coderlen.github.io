@@ -37,3 +37,4 @@
    Combiner位于Map Task中，相当于local reducer，通常跟Reducer逻辑一样，作用是对Map Task数据进行局部汇总或者规约，以减少数据输出量。
 
     
+
